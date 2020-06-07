@@ -17,6 +17,7 @@
     "apollo-boost": "^0.4.9",
     "apollo-client": "^2.6.10",
     "graphql": "^15.0.0",
+    "prop-types": "^15.7.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-gesture-handler": "^1.6.1",

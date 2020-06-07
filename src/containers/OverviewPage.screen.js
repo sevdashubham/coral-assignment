@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import {
     SafeAreaView,
     StyleSheet,
@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import GET_POSTS from "../_queries/getPosts";
+import { setFavorite,removeFavorite, AppContext } from '../_contexts/app.context';
+import PostList from '../components/PostList';
 
 const styles = StyleSheet.create({
     header: {
@@ -24,34 +26,33 @@ const styles = StyleSheet.create({
     },
 })
 
-function RenderPosts() {
+export default function OverviewScreen({ navigation }) {
+    const [{favoriteList}, dispatch] = useContext(AppContext)
     let page = 1;
-    React.useReducer
+
+
     const { loading, error, data } = useQuery(GET_POSTS, {
         variables: { page },
     });
 
     if (loading) return <Text>Loading...</Text>;
     if (error) return <Text>Error :(</Text>;
-    console.log(data);
-    return data.posts.map(({ title, date }) => (
-        <View>
-        <Text>
-        `${title}: ${date}`
-        </Text>
-        </View>
-    ));
-}
+    const {posts} = data;
 
-export default function OverviewScreen({ navigation }) {
+    const onSetFavorite = (id) => {
+        favoriteList.includes(id) ? dispatch(removeFavorite(id)): dispatch(setFavorite(id))
+    }
+
+    const onClick = (id) => {
+        navigation.navigate('Details', {
+            postId: id
+        })
+    }
 
     return (
         <View>
-        <RenderPosts/>
-        <Button
-    title="Go to Details"
-    onPress={() => navigation.navigate('Details')}
-    />
+        <PostList data={posts} favoriteList={favoriteList} onSetFavorite={onSetFavorite} onClick={onClick}/>
         </View>
 )
+
 }

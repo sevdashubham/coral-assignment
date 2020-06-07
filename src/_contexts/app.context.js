@@ -6,11 +6,15 @@ export const AppConsumer = AppContext.Consumer
 
 const initialState = {
     favoriteList: [],
-    // currentPersonId: null,
+    posts: []
 }
 
 const reducer = (state, action) => {
     switch (action.type) {
+        case 'FETCH_POSTS':
+            return { ...state, posts: action.payload }
+            case 'LOAD_MORE_POSTS':
+                return { ...state, posts: [...state.posts, action.payload] }
         case 'SET_FAVORITE':
             return { ...state, favoriteList: [...state.favoriteList, action.payload] }
         case 'REMOVE_FAVORITE':
@@ -22,6 +26,8 @@ const reducer = (state, action) => {
     }
 }
 
+export const fetchPosts = (posts) => ({ type: 'FETCH_POSTS', payload: posts })
+export const loadMorePosts = (posts) => ({ type: 'LOAD_MORE_POSTS', payload: posts })
 export const setFavorite = (id) => ({ type: 'SET_FAVORITE', payload: id })
 export const removeFavorite = (id) => ({ type: 'REMOVE_FAVORITE', payload: id })
 export const reset = () => ({ type: 'RESET' })

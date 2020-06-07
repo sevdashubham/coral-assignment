@@ -15,9 +15,9 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import ApolloClient, { InMemoryCache, gql } from "apollo-boost";
+import ApolloClient, { gql } from "apollo-boost";
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
-import { AppProvider } from './src/_contexts/app.context'
+import { AppProvider } from './src/_contexts/app.context';
 import {
   Header,
   LearnMoreLinks,
@@ -29,73 +29,21 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/_navigation/routes';
 
-const cache = new InMemoryCache();
+// const cache = new InMemoryCache();
 const client = new ApolloClient({
   uri: 'https://fakeql.com/graphql/e13cf3aff40b1e2734e8f0131fc41046'
 });
 
-
-const EXCHANGE_RATES = gql`
- {
-  post(id: 2) {
-    id
-    title
-    date
-    user {
-    profilePicture
-      age
-      comments {
-        text
-      }
-      firstname
-    }
-  }
-}
-`;
-
-const EXCHANGE_POSTS = gql`
- query getPosts($page: Int!) {
-  posts(page: $page) {
-    id
-    date
-    title
-    user {
-      id
-      firstname
-    }
-  }
-}
-`;
-
-function ExchangeRates() {
-  let page = 1;
-  React.useReducer
-  const { loading, error, data } = useQuery(GET_POSTS, {
-    variables: { page },
-  });
-
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error :(</Text>;
-  console.log(data);
-  return data.posts.map(({ title, date }) => (
-      <View>
-      <Text>
-      `${title}: ${date}`
-</Text>
-  </View>
-));
-}
-
 const App: () => React$Node = () => {
   return (
       <ApolloProvider client={client}>
-      <NavigationContainer>
       <AppProvider>
       <StatusBar barStyle="dark-content" />
+      <NavigationContainer>
       <AppNavigator/>
-              </AppProvider>
-              </NavigationContainer>
-  </ApolloProvider>
+      </NavigationContainer>
+      </AppProvider>
+      </ApolloProvider>
   );
 };
 
