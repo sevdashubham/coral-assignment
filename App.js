@@ -15,7 +15,9 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
+import ApolloClient, { InMemoryCache, gql } from "apollo-boost";
+import { ApolloProvider, useQuery } from '@apollo/react-hooks';
+import { AppProvider } from './src/_contexts/app.context'
 import {
   Header,
   LearnMoreLinks,
@@ -24,51 +26,76 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './src/_navigation/routes';
+
+const cache = new InMemoryCache();
+const client = new ApolloClient({
+  uri: 'https://fakeql.com/graphql/e13cf3aff40b1e2734e8f0131fc41046'
+});
+
+
+const EXCHANGE_RATES = gql`
+ {
+  post(id: 2) {
+    id
+    title
+    date
+    user {
+    profilePicture
+      age
+      comments {
+        text
+      }
+      firstname
+    }
+  }
+}
+`;
+
+const EXCHANGE_POSTS = gql`
+ query getPosts($page: Int!) {
+  posts(page: $page) {
+    id
+    date
+    title
+    user {
+      id
+      firstname
+    }
+  }
+}
+`;
+
+function ExchangeRates() {
+  let page = 1;
+  React.useReducer
+  const { loading, error, data } = useQuery(GET_POSTS, {
+    variables: { page },
+  });
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :(</Text>;
+  console.log(data);
+  return data.posts.map(({ title, date }) => (
+      <View>
+      <Text>
+      `${title}: ${date}`
+</Text>
+  </View>
+));
+}
+
 const App: () => React$Node = () => {
   return (
-    <>
+      <ApolloProvider client={client}>
+      <NavigationContainer>
+      <AppProvider>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+      <AppNavigator/>
+              </AppProvider>
+              </NavigationContainer>
+  </ApolloProvider>
   );
 };
 
