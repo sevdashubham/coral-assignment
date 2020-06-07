@@ -6,6 +6,12 @@ export default gql`
     id
     title
     date
+    desc
+    user {
+    id
+    firstname
+    profilePicture
+    }
   }
 }
 `;

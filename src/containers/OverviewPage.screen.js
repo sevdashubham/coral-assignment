@@ -10,11 +10,11 @@ import {
 import { useQuery } from '@apollo/react-hooks';
 import GET_POSTS from "../_queries/getPosts";
 import { setFavorite,removeFavorite, AppContext } from '../_contexts/app.context';
-import PostList from '../components/PostList';
+import PostList from '../components/PostList/PostList.component';
 
 const styles = StyleSheet.create({
     header: {
-        marginTop: 100,
+        marginTop: 30,
     },
 
     button: {

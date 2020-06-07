@@ -1,0 +1,6 @@
+export const COLOR_PRIMARY = '#fae8de'
+export const COLOR_PRIMARY_DARK = '#ECC2AC'
+export const COLOR_TEXT = '#15253B'
+export const COLOR_BG = '#C84630'
+export const COLOR_WHITE = '#FFFFFF'
+export const COLOR_BLACK = '#000'
