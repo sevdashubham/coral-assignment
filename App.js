@@ -29,7 +29,7 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/_navigation/routes';
 
-// const cache = new InMemoryCache();
+// use config file in production
 const client = new ApolloClient({
   uri: 'https://fakeql.com/graphql/e13cf3aff40b1e2734e8f0131fc41046'
 });
